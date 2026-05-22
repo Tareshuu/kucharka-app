@@ -33,7 +33,7 @@ export default function ProcessSteps({ steps }: Props) {
       )}
       <ol className="space-y-4">
         {sorted.map((step, i) => (
-          <li key={step.id} className="flex gap-4">
+          <li key={step.id} className="process-step flex gap-4">
             <div className="shrink-0 w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-sm font-bold">
               {i + 1}
             </div>

@@ -33,11 +33,41 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: #a08060; }
 
 @media print {
-  body { background: white; color: black; font-family: var(--font-sans); }
-  header, .no-print, footer { display: none !important; }
-  main { padding: 0 !important; max-width: 100% !important; }
+  /* Základní reset */
+  body { background: white !important; color: #1a1a1a !important; font-family: var(--font-sans); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  header, footer, .no-print { display: none !important; }
+  main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
+
+  /* Print-only a print-hidden prvky */
   .print-header { display: block !important; }
-  .bg-white { box-shadow: none !important; border: 1px solid #e5e5e5; }
+  .print-only   { display: block !important; }
+
+  /* Kalkulátor — schovat interaktivní část */
+  .calculator-controls { display: none !important; }
+
+  /* Fotografie — omezit výšku */
+  .recipe-photo { max-height: 220px !important; aspect-ratio: auto !important; overflow: hidden !important; border-radius: 8px !important; }
+  .recipe-photo img { object-fit: cover; width: 100%; height: 100%; }
+
+  /* Kroky postupu — nerozdělovat přes stránky */
+  .process-step { break-inside: avoid; page-break-inside: avoid; }
+  h2 { break-after: avoid; page-break-after: avoid; }
+  section { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Odstraň shadow, zjednodušit rádius */
+  * { box-shadow: none !important; }
+  .rounded-2xl, .rounded-xl, .rounded-lg { border-radius: 6px !important; }
+
+  /* Orámování bílých karet */
+  .bg-white { border: 1px solid #ddd !important; }
+
+  /* Zachovat barvy skupin surovin */
+  .bg-gray-50  { background-color: #f5f5f5 !important; }
+  .bg-amber-50 { background-color: #fffbf2 !important; }
+
+  /* Odstraň dekorativní pseudo-elementy odkazů */
   a[href]::after { content: none !important; }
-  @page { margin: 1.5cm; }
+
+  /* Stránka A4 na výšku, 1.5 cm okraje */
+  @page { margin: 1.5cm; size: A4 portrait; }
 }

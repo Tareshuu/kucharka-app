@@ -50,18 +50,11 @@ export default function RecipeDetail() {
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
-      {/* Tiskový hlavička — skrytá na obrazovce, viditelná při tisku */}
-      <div className="print-header hidden">
-        <h1 className="text-2xl font-bold">{meta.title}</h1>
-        <p className="text-sm text-gray-500">{cat?.icon} {cat?.name ?? meta.category} · {meta.baseWeight >= 1000 ? `${(meta.baseWeight / 1000).toFixed(1)} kg` : `${meta.baseWeight} g`}</p>
-        {meta.description && <p className="text-sm mt-1">{meta.description}</p>}
-      </div>
-
       {/* Fotka header */}
       {photos.length > 0 && (() => {
         const primary = photos.find((p) => p.isPrimary) ?? photos[0]
         return (
-          <div className="aspect-[16/7] rounded-2xl overflow-hidden -mx-4 md:mx-0">
+          <div className="recipe-photo aspect-[16/7] rounded-2xl overflow-hidden -mx-4 md:mx-0">
             <img src={primary.dataUrl} alt={meta.title} className="w-full h-full object-cover" />
           </div>
         )
@@ -89,7 +82,7 @@ export default function RecipeDetail() {
           <button
             onClick={() => toggleStarred(recipe.id)}
             aria-label={meta.starred ? 'Odebrat z oblíbených' : 'Přidat do oblíbených'}
-            className={`text-2xl shrink-0 transition-transform hover:scale-110 ${meta.starred ? 'text-amber-400' : 'text-gray-200'}`}
+            className={`no-print text-2xl shrink-0 transition-transform hover:scale-110 ${meta.starred ? 'text-amber-400' : 'text-gray-200'}`}
           >
             ★
           </button>
@@ -223,6 +216,7 @@ export default function RecipeDetail() {
         {recipe.updatedAt !== recipe.createdAt && (
           <> · Upraveno {new Date(recipe.updatedAt).toLocaleDateString('cs-CZ')}</>
         )}
+        <span className="print-only hidden"> · Tisk {new Date().toLocaleDateString('cs-CZ')}</span>
       </p>
     </div>
   )

@@ -27,8 +27,8 @@ export default function IngredientCalculator({ ingredients, baseWeight }: Props)
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-amber-100 overflow-hidden">
-      {/* Kalkulátor hlavička */}
-      <div className="px-5 py-4 border-b border-amber-100 bg-amber-50/50">
+      {/* Kalkulátor hlavička — schovaná při tisku */}
+      <div className="calculator-controls px-5 py-4 border-b border-amber-100 bg-amber-50/50">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-semibold text-gray-800">Přepočet surovin</h2>
           <button
@@ -93,6 +93,21 @@ export default function IngredientCalculator({ ingredients, baseWeight }: Props)
             · Poměr: {(targetWeight / baseWeight).toFixed(2)}×
           </div>
         )}
+      </div>
+
+      {/* Print-only nadpis se zvoleným množstvím */}
+      <div className="print-only hidden px-5 py-3 border-b border-gray-100 bg-gray-50">
+        <h2 className="font-semibold text-gray-800">
+          Suroviny
+          <span className="text-sm font-normal text-gray-500 ml-2">
+            — {targetWeight >= 1000
+              ? `${(targetWeight / 1000).toLocaleString('cs-CZ', { maximumFractionDigits: 2 })} kg`
+              : `${targetWeight} g`}
+            {targetWeight !== baseWeight && (
+              <span className="text-gray-400"> (základ {baseWeight >= 1000 ? `${baseWeight / 1000} kg` : `${baseWeight} g`}, poměr {(targetWeight / baseWeight).toFixed(2)}×)</span>
+            )}
+          </span>
+        </h2>
       </div>
 
       {/* Tabulka surovin */}
