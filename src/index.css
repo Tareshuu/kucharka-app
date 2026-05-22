@@ -68,10 +68,11 @@ body {
   /* Odstraň dekorativní pseudo-elementy odkazů */
   a[href]::after { content: none !important; }
 
-  /* PrintAll — oddílové stránky a zalomení */
-  .cat-section-divider { min-height: 100vh !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* PrintAll — každý oddíl i recept = přesně jedna stránka A4 (267 mm = 297 mm − 2 × 1,5 cm) */
+  .cat-section-divider { height: 267mm !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .print-cat-break { break-before: page; }
-  .all-print-recipe { break-before: page; }
+  .all-print-recipe { break-before: page; height: 267mm !important; overflow: hidden !important; padding: 0 !important; border: none !important; }
+  .print-2col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1.2rem !important; }
 
   /* Stránka A4 na výšku, 1.5 cm okraje */
   @page { margin: 1.5cm; size: A4 portrait; }

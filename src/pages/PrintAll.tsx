@@ -4,6 +4,12 @@ import { BUILT_IN_CATEGORIES, GROUP_LABEL, DIFFICULTY_LABEL } from '../types/rec
 import type { Recipe, RecipeDifficulty } from '../types/recipe'
 import { calculateIngredients, formatAmount } from '../modules/calculator'
 
+function dur(min: number) {
+  return min >= 60
+    ? `${Math.floor(min / 60)} h${min % 60 > 0 ? ` ${min % 60} min` : ''}`
+    : `${min} min`
+}
+
 function RecipePrint({ recipe }: { recipe: Recipe }) {
   const { meta, ingredients, process, notes } = recipe
   const calculated = calculateIngredients(ingredients, meta.baseWeight, meta.baseWeight)
@@ -13,60 +19,58 @@ function RecipePrint({ recipe }: { recipe: Recipe }) {
 
   return (
     <div>
-      <div className="pb-3 border-b border-gray-200 mb-4">
-        <h2 className="text-xl font-bold text-gray-900">{meta.title}</h2>
-        {meta.description && (
-          <p className="text-gray-500 text-sm mt-1">{meta.description}</p>
-        )}
-      </div>
-
-      {(meta.baseWeight > 0 || meta.smokingTemp || meta.smokingDuration || meta.difficulty) && (
-        <div className="flex gap-4 flex-wrap mb-4 text-sm text-gray-600">
-          {meta.baseWeight > 0 && (
-            <span>⚖️ <strong>{meta.baseWeight >= 1000 ? `${(meta.baseWeight / 1000).toFixed(1)} kg` : `${meta.baseWeight} g`}</strong></span>
-          )}
-          {meta.smokingTemp && (
-            <span>🌡️ <strong>{meta.smokingTemp} °C</strong></span>
-          )}
-          {meta.smokingDuration && (
-            <span>⏱️ <strong>{meta.smokingDuration >= 60 ? `${Math.floor(meta.smokingDuration / 60)} h${meta.smokingDuration % 60 > 0 ? ` ${meta.smokingDuration % 60} min` : ''}` : `${meta.smokingDuration} min`}</strong></span>
-          )}
-          {meta.difficulty && (
-            <span>📊 <strong>{DIFFICULTY_LABEL[meta.difficulty as RecipeDifficulty]}</strong></span>
+      {/* Header */}
+      <div className="flex items-start gap-4 pb-2 mb-2 border-b-2 border-gray-300">
+        <div className="flex-1">
+          <h2 className="text-base font-bold text-gray-900 leading-tight">{meta.title}</h2>
+          {meta.description && (
+            <p className="text-xs text-gray-500 mt-0.5 leading-snug">{meta.description}</p>
           )}
         </div>
-      )}
+        <div className="shrink-0 text-right text-xs text-gray-500 space-y-0.5">
+          {meta.baseWeight > 0 && (
+            <div>⚖️ {meta.baseWeight >= 1000 ? `${(meta.baseWeight / 1000).toFixed(1)} kg` : `${meta.baseWeight} g`}</div>
+          )}
+          {meta.smokingTemp && <div>🌡️ {meta.smokingTemp} °C</div>}
+          {meta.smokingDuration && <div>⏱️ {dur(meta.smokingDuration)}</div>}
+          {meta.difficulty && <div>{DIFFICULTY_LABEL[meta.difficulty as RecipeDifficulty]}</div>}
+        </div>
+      </div>
 
       {meta.tags.length > 0 && (
-        <div className="flex gap-2 flex-wrap mb-4">
+        <div className="flex gap-1 flex-wrap mb-2">
           {meta.tags.map((t) => (
-            <span key={t} className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full border border-amber-100">{t}</span>
+            <span key={t} className="text-xs bg-amber-50 text-amber-700 px-1.5 py-px rounded-full border border-amber-100">{t}</span>
           ))}
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {/* Two-column body */}
+      <div className="print-2col grid grid-cols-1 sm:grid-cols-2 gap-4">
+
         {ingredients.length > 0 && (
           <div>
-            <h3 className="font-semibold text-xs text-gray-500 mb-2 uppercase tracking-wide">
+            <div className="font-semibold text-xs text-gray-400 uppercase tracking-wide mb-1">
               Suroviny — {meta.baseWeight >= 1000 ? `${(meta.baseWeight / 1000).toFixed(1)} kg` : `${meta.baseWeight} g`}
-            </h3>
-            <table className="w-full text-sm">
+            </div>
+            <table className="w-full">
               <tbody>
                 {groups.map((group) => (
                   <React.Fragment key={group}>
                     {groups.length > 1 && (
                       <tr>
-                        <td colSpan={2} className="text-xs font-semibold text-gray-400 uppercase pt-2 pb-0.5 tracking-wide">{GROUP_LABEL[group]}</td>
+                        <td colSpan={2} className="text-xs font-semibold text-gray-400 uppercase pt-1.5 pb-px tracking-wide">
+                          {GROUP_LABEL[group]}
+                        </td>
                       </tr>
                     )}
                     {calculated.filter((i) => i.group === group).map((ing) => (
                       <tr key={ing.id} className="border-b border-gray-100">
-                        <td className="py-1 text-gray-800">{ing.name}</td>
-                        <td className="py-1 text-right font-semibold text-amber-800">
+                        <td className="py-px text-xs text-gray-800 pr-2 leading-snug">{ing.name}</td>
+                        <td className="py-px text-right text-xs font-semibold text-amber-800 whitespace-nowrap leading-snug">
                           {formatAmount(ing.displayAmount, ing.displayUnit)}
                           {ing.unit === '%' && (
-                            <span className="text-xs text-gray-400 ml-1">({ing.amount}%)</span>
+                            <span className="text-gray-400 ml-0.5">({ing.amount}%)</span>
                           )}
                         </td>
                       </tr>
@@ -80,32 +84,28 @@ function RecipePrint({ recipe }: { recipe: Recipe }) {
 
         {sorted.length > 0 && (
           <div>
-            <h3 className="font-semibold text-xs text-gray-500 mb-2 uppercase tracking-wide">
-              Postup výroby
+            <div className="font-semibold text-xs text-gray-400 uppercase tracking-wide mb-1">
+              Postup
               {totalMinutes > 0 && (
-                <span className="font-normal text-gray-400 ml-2 normal-case">
-                  ({totalMinutes >= 60
-                    ? `${Math.floor(totalMinutes / 60)} h${totalMinutes % 60 > 0 ? ` ${totalMinutes % 60} min` : ''}`
-                    : `${totalMinutes} min`})
-                </span>
+                <span className="font-normal text-gray-400 ml-1 normal-case">({dur(totalMinutes)})</span>
               )}
-            </h3>
-            <ol className="space-y-3">
+            </div>
+            <ol className="space-y-1.5">
               {sorted.map((step, i) => (
-                <li key={step.id} className="process-step flex gap-3">
-                  <div className="shrink-0 w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold">{i + 1}</div>
-                  <div className="flex-1">
+                <li key={step.id} className="process-step flex gap-2">
+                  <div className="shrink-0 w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs font-bold leading-none">
+                    {i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
                     {step.title && (
-                      <div className="font-semibold text-gray-800 text-sm mb-0.5">{step.title}</div>
+                      <div className="font-semibold text-xs text-gray-800 leading-snug">{step.title}</div>
                     )}
-                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{step.description}</p>
+                    <p className="text-xs text-gray-700 leading-snug whitespace-pre-line">{step.description}</p>
                     {(step.temperature !== undefined || (step.duration !== undefined && step.duration > 0)) && (
-                      <div className="flex gap-3 mt-1 text-xs text-gray-400">
+                      <div className="flex gap-2 text-xs text-gray-400">
                         {step.temperature !== undefined && <span>🌡️ {step.temperature} °C</span>}
                         {step.duration !== undefined && step.duration > 0 && (
-                          <span>⏱️ {step.duration >= 60
-                            ? `${Math.floor(step.duration / 60)} h ${step.duration % 60 > 0 ? `${step.duration % 60} min` : ''}`
-                            : `${step.duration} min`}</span>
+                          <span>⏱️ {dur(step.duration)}</span>
                         )}
                       </div>
                     )}
@@ -118,9 +118,9 @@ function RecipePrint({ recipe }: { recipe: Recipe }) {
       </div>
 
       {notes && (
-        <div className="mt-4 pt-3 border-t border-gray-100">
-          <h3 className="font-semibold text-xs text-gray-500 mb-2 uppercase tracking-wide">Poznámky</h3>
-          <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{notes}</p>
+        <div className="mt-2 pt-1.5 border-t border-gray-100">
+          <div className="font-semibold text-xs text-gray-400 uppercase tracking-wide mb-0.5">Poznámky</div>
+          <p className="text-xs text-gray-700 leading-snug whitespace-pre-line">{notes}</p>
         </div>
       )}
     </div>
@@ -167,7 +167,7 @@ export default function PrintAll() {
 
       {sections.map(({ cat, catRecipes }, catIdx) => (
         <div key={cat.id}>
-          {/* Section cover page */}
+          {/* Section cover */}
           <div
             className={`cat-section-divider -mx-4 md:-mx-6 flex items-center justify-center${catIdx > 0 ? ' print-cat-break' : ''}`}
             style={{ background: `linear-gradient(135deg, ${cat.color[0]}, ${cat.color[1]})` }}
@@ -182,9 +182,9 @@ export default function PrintAll() {
             </div>
           </div>
 
-          {/* Individual recipes */}
+          {/* Recipes */}
           {catRecipes.map((recipe) => (
-            <div key={recipe.id} className="all-print-recipe py-8 border-b border-gray-100 last:border-0">
+            <div key={recipe.id} className="all-print-recipe py-6 border-b border-gray-100 last:border-0">
               <RecipePrint recipe={recipe} />
             </div>
           ))}
