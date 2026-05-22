@@ -91,7 +91,7 @@ export default function RecipeHub() {
         </div>
       )}
 
-      {/* Akce */}
+      {/* Akce — primární */}
       <div className="flex gap-3 justify-center flex-wrap pt-2">
         <button
           onClick={() => setShowImport(true)}
@@ -105,27 +105,30 @@ export default function RecipeHub() {
         >
           ✏️ Nový recept
         </Link>
+        <Link
+          to="/denik"
+          className="border border-amber-300 text-amber-700 hover:bg-amber-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
+        >
+          🪵 Deník uzení
+        </Link>
+      </div>
+      {/* Akce — sekundární */}
+      <div className="flex gap-2 justify-center flex-wrap">
         <button
           onClick={() => setShowCustomIngredients(true)}
-          className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
+          className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
         >
           🧂 Suroviny
         </button>
         <Link
-          to="/denik"
-          className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
-        >
-          🪵 Deník uzení
-        </Link>
-        <Link
           to="/print"
-          className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
+          className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
         >
           📚 Tisknout kuchařku
         </Link>
         <button
           onClick={() => setShowBackup(true)}
-          className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
+          className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
         >
           💾 Záloha
         </button>

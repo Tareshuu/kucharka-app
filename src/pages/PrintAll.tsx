@@ -170,7 +170,11 @@ export default function PrintAll() {
           {/* Section cover */}
           <div
             className={`cat-section-divider -mx-4 md:-mx-6 flex items-center justify-center${catIdx > 0 ? ' print-cat-break' : ''}`}
-            style={{ background: `linear-gradient(135deg, ${cat.color[0]}, ${cat.color[1]})` }}
+            style={{
+              background: `linear-gradient(135deg, ${cat.color[0]}, ${cat.color[1]})`,
+              WebkitPrintColorAdjust: 'exact',
+              printColorAdjust: 'exact',
+            } as React.CSSProperties}
           >
             <div className="text-center text-white py-20 px-8">
               <div className="text-8xl mb-6">{cat.icon}</div>

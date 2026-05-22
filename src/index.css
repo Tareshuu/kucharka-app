@@ -69,9 +69,40 @@ body {
   a[href]::after { content: none !important; }
 
   /* PrintAll — každý oddíl i recept = přesně jedna stránka A4 (267 mm = 297 mm − 2 × 1,5 cm) */
-  .cat-section-divider { height: 267mm !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-cat-break { break-before: page; }
-  .all-print-recipe { break-before: page; height: 267mm !important; overflow: hidden !important; padding: 0 !important; border: none !important; }
+  .cat-section-divider {
+    height: 267mm !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    /* Vždy zalomit stránku ZA obálkou — obálka nepřetéká na další stránku */
+    break-after: page !important;
+    page-break-after: always !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  .print-cat-break { break-before: page; page-break-before: always; }
+  .all-print-recipe {
+    break-before: page;
+    page-break-before: always;
+    height: 267mm !important;
+    overflow: hidden !important;
+    padding: 5mm 0 0 !important;
+    border: none !important;
+    position: relative !important;
+  }
+  /* Dekorativní čára na spodku každé stránky receptu */
+  .all-print-recipe::after {
+    content: '';
+    position: absolute;
+    bottom: 5mm;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #d4c4a8;
+  }
   .print-2col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1.2rem !important; }
 
   /* Stránka A4 na výšku, 1.5 cm okraje */
