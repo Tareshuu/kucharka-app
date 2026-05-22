@@ -5,6 +5,7 @@ import CategoryView from './pages/CategoryView'
 import RecipeDetail from './pages/RecipeDetail'
 import RecipeEditor from './pages/RecipeEditor'
 import SmokingDiary from './pages/SmokingDiary'
+import PrintAll from './pages/PrintAll'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/recipe/:id" element={<RecipeDetail />} />
           <Route path="/recipe/:id/edit" element={<RecipeEditor />} />
           <Route path="/denik" element={<SmokingDiary />} />
+          <Route path="/print" element={<PrintAll />} />
         </Routes>
       </Layout>
     </BrowserRouter>

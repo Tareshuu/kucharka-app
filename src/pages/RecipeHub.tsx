@@ -117,6 +117,12 @@ export default function RecipeHub() {
         >
           🪵 Deník uzení
         </Link>
+        <Link
+          to="/print"
+          className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
+        >
+          📚 Tisknout kuchařku
+        </Link>
         <button
           onClick={() => setShowBackup(true)}
           className="border border-gray-200 text-gray-500 hover:bg-gray-50 font-medium px-4 py-2 rounded-xl transition-colors text-sm"
