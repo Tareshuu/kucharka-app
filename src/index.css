@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --color-surface: #f5f0ea;
+  --color-brand: #c0392b;
+  --color-brand-dark: #922b21;
+  --color-smoke: #e67e22;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: #1a0f0a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c9b99a; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #a08060; }
+
+@media print {
+  body { background: white; color: black; font-family: var(--font-sans); }
+  header, .no-print, footer { display: none !important; }
+  main { padding: 0 !important; max-width: 100% !important; }
+  .print-header { display: block !important; }
+  .bg-white { box-shadow: none !important; border: 1px solid #e5e5e5; }
+  a[href]::after { content: none !important; }
+  @page { margin: 1.5cm; }
+}
