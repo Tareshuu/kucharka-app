@@ -9,8 +9,18 @@ interface Props {
 
 const DIFFICULTY_DOT = ['', '●○○', '●●○', '●●●']
 
+function fmtDuration(minutes: number) {
+  if (minutes >= 60) {
+    const h = Math.floor(minutes / 60)
+    const m = minutes % 60
+    return m > 0 ? `${h} h ${m} min` : `${h} h`
+  }
+  return `${minutes} min`
+}
+
 export default function RecipeCard({ recipe }: Props) {
-  const { meta, photos, ingredients } = recipe
+  const { meta, photos, ingredients, process } = recipe
+  const totalMinutes = process.reduce((sum, s) => sum + (s.duration ?? 0), 0)
   const customCategories = useRecipeStore((s) => s.customCategories)
   const primary = photos.find((p) => p.isPrimary) ?? photos[0]
   const cat =
@@ -55,10 +65,28 @@ export default function RecipeCard({ recipe }: Props) {
           </span>
           <span>·</span>
           <span className="whitespace-nowrap">{ingredients.length} surovin</span>
+          {totalMinutes > 0 && (
+            <>
+              <span>·</span>
+              <span className="whitespace-nowrap">⏱ {fmtDuration(totalMinutes)}</span>
+            </>
+          )}
           {meta.difficulty && (
             <span className="ml-auto shrink-0 text-amber-500">{DIFFICULTY_DOT[meta.difficulty]}</span>
           )}
         </div>
+        {meta.tags.length > 0 && (
+          <div className="flex gap-1 flex-wrap mt-2">
+            {meta.tags.slice(0, 3).map((tag) => (
+              <span key={tag} className="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full border border-amber-100">
+                {tag}
+              </span>
+            ))}
+            {meta.tags.length > 3 && (
+              <span className="text-xs text-gray-400 self-center">+{meta.tags.length - 3}</span>
+            )}
+          </div>
+        )}
       </div>
     </Link>
   )

@@ -56,6 +56,7 @@ export default function CategoryView() {
   const [sort, setSort] = useState<SortKey>('updatedAt')
   const [onlyStarred, setOnlyStarred] = useState(false)
   const [difficulty, setDifficulty] = useState<'' | '1' | '2' | '3'>('')
+  const [activeTag, setActiveTag] = useState('')
   const [showImport, setShowImport] = useState(false)
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
@@ -77,10 +78,16 @@ export default function CategoryView() {
     sorted = [...sorted].sort((a, b) => new Date(b[sort]).getTime() - new Date(a[sort]).getTime())
   }
 
+  // Unique tags across all recipes in this category
+  const allTags = [...new Set(
+    recipes.filter((r) => r.meta.category === id).flatMap((r) => r.meta.tags)
+  )].sort((a, b) => a.localeCompare(b, 'cs'))
+
   // Filters applied on top of sort
   let filtered = sorted
   if (onlyStarred) filtered = filtered.filter((r) => r.meta.starred)
   if (difficulty) filtered = filtered.filter((r) => r.meta.difficulty?.toString() === difficulty)
+  if (activeTag) filtered = filtered.filter((r) => r.meta.tags.includes(activeTag))
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -107,7 +114,7 @@ export default function CategoryView() {
     setCategoryOrder(id!, newFullOrder)
   }
 
-  const filtersActive = onlyStarred || difficulty !== ''
+  const filtersActive = onlyStarred || difficulty !== '' || activeTag !== ''
 
   if (!cat) {
     return (
@@ -176,7 +183,7 @@ export default function CategoryView() {
 
         {filtersActive && (
           <button
-            onClick={() => { setOnlyStarred(false); setDifficulty('') }}
+            onClick={() => { setOnlyStarred(false); setDifficulty(''); setActiveTag('') }}
             className="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 rounded-xl px-2.5 py-2 bg-white transition-colors"
             title="Zrušit filtry"
           >
@@ -192,6 +199,7 @@ export default function CategoryView() {
         >
           📄 Import
         </button>
+
         <Link
           to="/recipe/new"
           className="text-sm border border-amber-300 text-amber-700 hover:bg-amber-50 font-medium px-4 py-2 rounded-xl transition-colors"
@@ -199,6 +207,25 @@ export default function CategoryView() {
           ✏️ Nový
         </Link>
       </div>
+
+      {/* Tagy */}
+      {allTags.length > 0 && (
+        <div className="flex gap-1.5 flex-wrap -mt-2">
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(activeTag === tag ? '' : tag)}
+              className={`text-xs px-3 py-1 rounded-full border transition-colors ${
+                activeTag === tag
+                  ? 'bg-amber-600 border-amber-600 text-white'
+                  : 'border-amber-100 bg-amber-50 text-amber-700 hover:bg-amber-100'
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Hint pro manuální pořadí */}
       {sort === 'manual' && filtered.length > 1 && (

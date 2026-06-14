@@ -45,6 +45,9 @@ body {
   /* Kalkulátor — schovat interaktivní část */
   .calculator-controls { display: none !important; }
 
+  /* Detail receptu — plná šířka při tisku */
+  .recipe-detail { max-width: 100% !important; }
+
   /* Fotografie — omezit výšku */
   .recipe-photo { max-height: 220px !important; aspect-ratio: auto !important; overflow: hidden !important; border-radius: 8px !important; }
   .recipe-photo img { object-fit: cover; width: 100%; height: 100%; }

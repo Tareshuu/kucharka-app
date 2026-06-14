@@ -49,7 +49,7 @@ export default function RecipeDetail() {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto">
+    <div className="recipe-detail space-y-6 max-w-2xl mx-auto">
       {/* Fotka header */}
       {photos.length > 0 && (() => {
         const primary = photos.find((p) => p.isPrimary) ?? photos[0]

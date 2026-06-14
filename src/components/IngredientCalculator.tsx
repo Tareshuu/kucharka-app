@@ -71,7 +71,7 @@ export default function IngredientCalculator({ ingredients, baseWeight }: Props)
         </div>
 
         {/* Rychlé předvolby */}
-        <div className="flex gap-2 mt-3 flex-wrap">
+        <div className="flex gap-2 mt-3 flex-wrap items-center">
           {PRESETS.map((p) => (
             <button
               key={p}
@@ -83,6 +83,16 @@ export default function IngredientCalculator({ ingredients, baseWeight }: Props)
               }`}
             >
               {p >= 1000 ? `${p / 1000} kg` : `${p} g`}
+            </button>
+          ))}
+          <span className="text-gray-200 select-none">|</span>
+          {([0.5, 2, 5] as const).map((mult) => (
+            <button
+              key={mult}
+              onClick={() => setTargetWeight(Math.max(100, Math.round(targetWeight * mult / 100) * 100))}
+              className="text-xs px-3 py-1 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors"
+            >
+              {mult === 0.5 ? '×½' : `×${mult}`}
             </button>
           ))}
         </div>
