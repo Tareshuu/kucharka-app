@@ -11,6 +11,7 @@ export default function CategoryModal({ onClose }: Props) {
   const { customCategories, addCustomCategory, deleteCustomCategory, recipes } = useRecipeStore()
   const [name, setName] = useState('')
   const [icon, setIcon] = useState('🏷️')
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
   function handleAdd() {
     if (!name.trim()) return
@@ -74,11 +75,23 @@ export default function CategoryModal({ onClose }: Props) {
                     <span className="flex-1 text-sm font-medium">{cat.name}</span>
                     <span className="text-xs text-gray-400">{count} {count === 1 ? 'recept' : count <= 4 ? 'recepty' : 'receptů'}</span>
                     <button
-                      onClick={() => deleteCustomCategory(cat.id)}
-                      className="text-gray-300 hover:text-red-400 transition-colors text-lg leading-none ml-1"
-                      title="Smazat kategorii"
+                      onClick={() => {
+                        if (deleteConfirm === cat.id) {
+                          deleteCustomCategory(cat.id)
+                          setDeleteConfirm(null)
+                        } else {
+                          setDeleteConfirm(cat.id)
+                        }
+                      }}
+                      onBlur={() => setTimeout(() => setDeleteConfirm(null), 150)}
+                      className={`text-sm font-medium transition-colors px-2 py-0.5 rounded-lg ml-1 ${
+                        deleteConfirm === cat.id
+                          ? 'text-white bg-red-500 hover:bg-red-600'
+                          : 'text-gray-300 hover:text-red-400 hover:bg-red-50'
+                      }`}
+                      title={deleteConfirm === cat.id ? 'Klikni pro potvrzení' : 'Smazat kategorii'}
                     >
-                      ×
+                      {deleteConfirm === cat.id ? 'Smazat?' : '×'}
                     </button>
                   </div>
                 )

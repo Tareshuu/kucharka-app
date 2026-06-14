@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRecipeStore } from '../store/recipeStore'
 import { BUILT_IN_CATEGORIES, GROUP_LABEL, DIFFICULTY_LABEL } from '../types/recipe'
 import type { Recipe, RecipeDifficulty } from '../types/recipe'
@@ -143,11 +143,6 @@ export default function PrintAll() {
   const sections = allCategories
     .map((cat) => ({ cat, catRecipes: recipes.filter((r) => r.meta.category === cat.id) }))
     .filter(({ catRecipes }) => catRecipes.length > 0)
-
-  useEffect(() => {
-    const t = setTimeout(() => window.print(), 600)
-    return () => clearTimeout(t)
-  }, [])
 
   return (
     <div>

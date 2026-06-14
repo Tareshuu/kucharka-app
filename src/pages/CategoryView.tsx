@@ -109,13 +109,23 @@ export default function CategoryView() {
 
   const filtersActive = onlyStarred || difficulty !== ''
 
+  if (!cat) {
+    return (
+      <div className="text-center py-20 space-y-3">
+        <div className="text-5xl opacity-30">🔍</div>
+        <p className="text-gray-500 font-medium">Kategorie nenalezena</p>
+        <p className="text-gray-400 text-sm">ID: <code className="bg-gray-100 px-1 rounded">{id}</code></p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Hlavička kategorie */}
       <div
         className="rounded-2xl p-6 flex items-center gap-4"
         style={{
-          background: cat ? `linear-gradient(145deg, ${cat.color[0]}, ${cat.color[1]})` : '#888',
+          background: `linear-gradient(145deg, ${cat.color[0]}, ${cat.color[1]})`,
         }}
       >
         <span className="text-5xl">{cat?.icon ?? '🍖'}</span>

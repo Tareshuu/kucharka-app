@@ -8,14 +8,13 @@ import GlobalSearch from '../components/GlobalSearch'
 import BackupModal from '../components/BackupModal'
 import ImportModal from '../components/ImportModal'
 import CategoryModal from '../components/CategoryModal'
-import CustomIngredientsModal from '../components/CustomIngredientsModal'
 
 export default function RecipeHub() {
   const { recipes, customCategories } = useRecipeStore()
   const [showBackup, setShowBackup] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [showCategories, setShowCategories] = useState(false)
-  const [showCustomIngredients, setShowCustomIngredients] = useState(false)
+
 
   const allCategories = [
     ...BUILT_IN_CATEGORIES,
@@ -114,12 +113,18 @@ export default function RecipeHub() {
       </div>
       {/* Akce — sekundární */}
       <div className="flex gap-2 justify-center flex-wrap">
-        <button
-          onClick={() => setShowCustomIngredients(true)}
+        <Link
+          to="/normy"
+          className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
+        >
+          📋 Normy výrobků
+        </Link>
+        <Link
+          to="/suroviny"
           className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
         >
           🧂 Suroviny
-        </button>
+        </Link>
         <Link
           to="/print"
           className="border border-gray-200 text-gray-400 hover:bg-gray-50 hover:text-gray-600 font-medium px-3 py-1.5 rounded-xl transition-colors text-xs"
@@ -137,7 +142,6 @@ export default function RecipeHub() {
       {showBackup && <BackupModal onClose={() => setShowBackup(false)} />}
       {showImport && <ImportModal onClose={() => setShowImport(false)} />}
       {showCategories && <CategoryModal onClose={() => setShowCategories(false)} />}
-      {showCustomIngredients && <CustomIngredientsModal onClose={() => setShowCustomIngredients(false)} />}
     </div>
   )
 }

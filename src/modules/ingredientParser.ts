@@ -23,8 +23,8 @@ const UNIT_MAP: Record<string, IngredientUnit> = {
   '%': '%',
 }
 
-// Množitelé pro dl → ml (1 dl = 100 ml)
-const UNIT_MULTIPLIER: Partial<Record<string, number>> = { 'dl': 100 }
+// Množitelé: dl → ml (×100), cm → m (×0.01)
+const UNIT_MULTIPLIER: Partial<Record<string, number>> = { 'dl': 100, 'cm': 0.01 }
 
 const UNIT_PATTERN = Object.keys(UNIT_MAP)
   .sort((a, b) => b.length - a.length)

@@ -43,6 +43,7 @@ interface RecipeState {
 
   // Custom ingredients
   addCustomIngredient: (entry: Omit<IngredientDBEntry, 'id'>) => void
+  updateCustomIngredient: (id: string, partial: Partial<Omit<IngredientDBEntry, 'id'>>) => void
   deleteCustomIngredient: (id: string) => void
 
   // Category order (manual drag & drop order per category)
@@ -254,11 +255,12 @@ export const useRecipeStore = create<RecipeState>()(
           recipes: s.recipes.map((r) => {
             if (r.id !== recipeId) return r
             const filtered = r.photos.filter((p) => p.id !== photoId)
-            // Pokud se smazala primární, nastavit první jako primární
-            if (filtered.length > 0 && !filtered.some((p) => p.isPrimary)) {
-              filtered[0].isPrimary = true
+            const needsNewPrimary = filtered.length > 0 && !filtered.some((p) => p.isPrimary)
+            return {
+              ...r,
+              photos: needsNewPrimary ? filtered.map((p, i) => ({ ...p, isPrimary: i === 0 })) : filtered,
+              updatedAt: new Date().toISOString(),
             }
-            return { ...r, photos: filtered, updatedAt: new Date().toISOString() }
           }),
         })),
 
@@ -297,6 +299,13 @@ export const useRecipeStore = create<RecipeState>()(
       addCustomIngredient: (entry) =>
         set((s) => ({
           customIngredients: [...s.customIngredients, { ...entry, id: uuidv4() }],
+        })),
+
+      updateCustomIngredient: (id, partial) =>
+        set((s) => ({
+          customIngredients: s.customIngredients.map((i) =>
+            i.id === id ? { ...i, ...partial } : i
+          ),
         })),
 
       deleteCustomIngredient: (id) =>

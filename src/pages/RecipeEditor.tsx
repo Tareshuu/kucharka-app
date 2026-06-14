@@ -207,6 +207,8 @@ export default function RecipeEditor() {
     ])
     setNewIngName('')
     setNewIngAmount('')
+    setNewIngUnit('g')
+    setNewIngGroup('maso')
     setMatchedDbId(undefined)
     setSuggestions([])
   }
@@ -327,9 +329,7 @@ export default function RecipeEditor() {
       navigate(`/recipe/${recipe.id}`)
     } else {
       store.updateRecipeMeta(existing!.id, metaData)
-      store.updateRecipe(existing!.id, { ingredients, process: steps.map((s, i) => ({ ...s, order: i })), notes })
-      // Sync photos
-      store.updateRecipe(existing!.id, { photos })
+      store.updateRecipe(existing!.id, { ingredients, process: steps.map((s, i) => ({ ...s, order: i })), notes, photos })
       navigate(`/recipe/${existing!.id}`)
     }
   }
@@ -721,7 +721,9 @@ export default function RecipeEditor() {
                     <button
                       onClick={() => setPhotos((prev) => {
                         const filtered = prev.filter((_, j) => j !== i)
-                        if (photo.isPrimary && filtered.length > 0) filtered[0].isPrimary = true
+                        if (photo.isPrimary && filtered.length > 0) {
+                          return filtered.map((p, j) => ({ ...p, isPrimary: j === 0 }))
+                        }
                         return filtered
                       })}
                       className="bg-white/90 rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-100 shadow text-red-500"

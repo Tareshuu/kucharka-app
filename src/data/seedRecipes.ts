@@ -15,6 +15,7 @@ function s(order: number, description: string, opts?: { title?: string; duration
 }
 
 function recipe(
+  id: string,
   title: string,
   meta: Omit<RecipeMeta, 'title' | 'tags' | 'starred'> & { tags?: string[] },
   ingredients: Ingredient[],
@@ -23,7 +24,7 @@ function recipe(
 ): Recipe {
   const now = new Date('2025-01-01T12:00:00.000Z').toISOString()
   return {
-    id: uuidv4(),
+    id,
     meta: { title, tags: [], starred: false, ...meta },
     ingredients,
     process,
@@ -61,6 +62,7 @@ function suseneMasoCure(days: number, extra?: string): ProcessStep[] {
 // ── 5 000 g base — premium salámy ─────────────────────────────────────────────
 
 const modraKrev = recipe(
+  'seed-modra-krev',
   'Modrá krev',
   {
     category: 'salamy',
@@ -86,6 +88,7 @@ const modraKrev = recipe(
 )
 
 const kanciFK = recipe(
+  'seed-kanci-fik',
   'Kančí fík',
   {
     category: 'salamy',
@@ -112,6 +115,7 @@ const kanciFK = recipe(
 )
 
 const lanyzovyPan = recipe(
+  'seed-lanyzovy-pan',
   'Lanýžový Pán',
   {
     category: 'salamy',
@@ -135,6 +139,7 @@ const lanyzovyPan = recipe(
 )
 
 const cernaPerlaSalam = recipe(
+  'seed-cerna-perla',
   'Černá Perla (Fuet)',
   {
     category: 'salamy',
@@ -160,6 +165,7 @@ const cernaPerlaSalam = recipe(
 )
 
 const kachniNoblesa = recipe(
+  'seed-kachni-noblesa',
   'Kachní Noblesa (Fuet)',
   {
     category: 'salamy',
@@ -186,6 +192,7 @@ const kachniNoblesa = recipe(
 )
 
 const hribkovyLovec = recipe(
+  'seed-hribkovy-lovec',
   'Hříbkový Lovec (Fuet)',
   {
     category: 'salamy',
@@ -210,6 +217,7 @@ const hribkovyLovec = recipe(
 )
 
 const visualShock = recipe(
+  'seed-visual-shock',
   'Visual Shock – Černý salám',
   {
     category: 'salamy',
@@ -235,6 +243,7 @@ const visualShock = recipe(
 )
 
 const silkRoad = recipe(
+  'seed-silk-road',
   'Silk Road',
   {
     category: 'salamy',
@@ -261,6 +270,7 @@ const silkRoad = recipe(
 )
 
 const barista = recipe(
+  'seed-barista',
   'Barista (Kávový salám)',
   {
     category: 'salamy',
@@ -286,6 +296,7 @@ const barista = recipe(
 )
 
 const kavoveZrno = recipe(
+  'seed-kavove-zrno',
   'Kávové zrno',
   {
     category: 'salamy',
@@ -311,6 +322,7 @@ const kavoveZrno = recipe(
 )
 
 const asijskyDrak = recipe(
+  'seed-asijsky-drak',
   'Asijský drak',
   {
     category: 'salamy',
@@ -336,6 +348,7 @@ const asijskyDrak = recipe(
 )
 
 const lesniDuch = recipe(
+  'seed-lesni-duch',
   'Lesní duch',
   {
     category: 'salamy',
@@ -362,6 +375,7 @@ const lesniDuch = recipe(
 // ── 1 000 g base — premium salámy ─────────────────────────────────────────────
 
 const moleFuet = recipe(
+  'seed-mole-fuet',
   'Mole Fuet',
   {
     category: 'salamy',
@@ -388,6 +402,7 @@ const moleFuet = recipe(
 )
 
 const nordickeZlato = recipe(
+  'seed-nordicke-zlato',
   'Nordické Zlato',
   {
     category: 'salamy',
@@ -413,6 +428,7 @@ const nordickeZlato = recipe(
 )
 
 const tokijskyDrifting = recipe(
+  'seed-tokijsky-drifting',
   'Tokijský Drifting',
   {
     category: 'salamy',
@@ -439,6 +455,7 @@ const tokijskyDrifting = recipe(
 )
 
 const stredomorskiEthos = recipe(
+  'seed-stredomorsky-ethos',
   'Středomořský Éthos',
   {
     category: 'salamy',
@@ -467,6 +484,7 @@ const stredomorskiEthos = recipe(
 )
 
 const hovezi = recipe(
+  'seed-hovezi-zeleny-pepr',
   'Hovězí řemeslný se zeleným pepřem',
   {
     category: 'salamy',
@@ -492,6 +510,7 @@ const hovezi = recipe(
 )
 
 const kachniPistacii = recipe(
+  'seed-kachni-pistacie',
   'Kachní s pistáciemi (Francouzský styl)',
   {
     category: 'salamy',
@@ -517,6 +536,7 @@ const kachniPistacii = recipe(
 )
 
 const kanciLanyz = recipe(
+  'seed-kanci-lanyz',
   'Kančí s lanýžem (Toskánský)',
   {
     category: 'salamy',
@@ -542,6 +562,7 @@ const kanciLanyz = recipe(
 )
 
 const droeWors = recipe(
+  'seed-droewors',
   'Jihoafrický Droëwors',
   {
     category: 'salamy',
@@ -570,6 +591,7 @@ const droeWors = recipe(
 )
 
 const cernyDiamant = recipe(
+  'seed-cerny-diamant',
   'Černý diamant',
   {
     category: 'salamy',
@@ -594,6 +616,7 @@ const cernyDiamant = recipe(
 )
 
 const lesniAlchymie = recipe(
+  'seed-lesni-alchymie',
   'Lesní alchymie',
   {
     category: 'salamy',
@@ -618,6 +641,7 @@ const lesniAlchymie = recipe(
 )
 
 const raseninouvyKour = recipe(
+  'seed-raselinovy-kour',
   'Rašelinový kouř a Kakaové boby',
   {
     category: 'salamy',
@@ -644,6 +668,7 @@ const raseninouvyKour = recipe(
 // ── Klobásy ───────────────────────────────────────────────────────────────────
 
 const lesniKlobasa = recipe(
+  'seed-lesni-klobasa',
   'Lesní klobása (Radek Adámek)',
   {
     category: 'klobasy',
@@ -682,6 +707,7 @@ const lesniKlobasa = recipe(
 )
 
 const thajskaSaiOua = recipe(
+  'seed-thajska-sai-oua',
   'Thajská Sai Oua',
   {
     category: 'klobasy',
@@ -716,6 +742,7 @@ const thajskaSaiOua = recipe(
 )
 
 const pivniStout = recipe(
+  'seed-pivni-stout',
   'Pivní Stout & Jalapeño Cheddar',
   {
     category: 'klobasy',
@@ -749,6 +776,7 @@ const pivniStout = recipe(
 )
 
 const toskanskaFinocchiona = recipe(
+  'seed-toskanska-finocchiona',
   'Toskánská Finocchiona',
   {
     category: 'klobasy',
@@ -782,6 +810,7 @@ const toskanskaFinocchiona = recipe(
 // ── Sušené výrobky ────────────────────────────────────────────────────────────
 
 const italskaCoppa = recipe(
+  'seed-italska-coppa',
   'Italská Coppa Piacentina',
   {
     category: 'susene',
@@ -808,6 +837,7 @@ const italskaCoppa = recipe(
 )
 
 const bresaola = recipe(
+  'seed-bresaola',
   'Bresaola della Valtellina',
   {
     category: 'susene',
@@ -834,6 +864,7 @@ const bresaola = recipe(
 )
 
 const lomo = recipe(
+  'seed-lomo',
   'Lomo Embuchado',
   {
     category: 'susene',
@@ -863,6 +894,7 @@ const lomo = recipe(
 )
 
 const smokeyRuby = recipe(
+  'seed-smoky-ruby',
   'Hovězí Smoky Ruby',
   {
     category: 'susene',

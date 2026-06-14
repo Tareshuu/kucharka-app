@@ -1,19 +1,27 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import GlobalSearch from './GlobalSearch'
 
 declare const __APP_VERSION__: string
 
-function backTarget(pathname: string): { to: string; label: string } {
+function backTarget(pathname: string): { to: string; label: string } | null {
   if (pathname.startsWith('/denik')) return { to: '/', label: 'Kuchařka' }
+  if (pathname.startsWith('/suroviny')) return { to: '/', label: 'Kuchařka' }
+  if (pathname.startsWith('/normy')) return { to: '/', label: 'Kuchařka' }
   const editMatch = pathname.match(/^\/recipe\/([^/]+)\/edit$/)
   if (editMatch) return { to: `/recipe/${editMatch[1]}`, label: 'Recept' }
-  return { to: '/', label: 'Recepty' }
+  // /recipe/:id — go back in history (může přijít z kategorie, hubu i searche)
+  if (pathname.match(/^\/recipe\/[^/]+$/)) return null
+  if (pathname.startsWith('/category/')) return { to: '/', label: 'Recepty' }
+  return null
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
+  const navigate = useNavigate()
   const isHub = location.pathname === '/'
+  // Na /suroviny má stránka vlastní search — v headeru ho skryjeme
+  const hideHeaderSearch = isHub || location.pathname === '/suroviny'
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
 
   return (
@@ -39,7 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         )}
 
         {/* Search — na desktopu vždy, na mobilu jen mimo Hub nebo když je otevřený */}
-        {(!isHub || mobileSearchOpen) && (
+        {(!hideHeaderSearch || mobileSearchOpen) && (
           <div className={`flex-1 max-w-sm ${mobileSearchOpen ? 'block' : 'hidden sm:block'}`}>
             <GlobalSearch dark />
           </div>
@@ -47,8 +55,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <div className="flex-1 sm:flex-none" />
 
-        {/* Mobilní search ikona (jen mimo Hub) */}
-        {!isHub && !mobileSearchOpen && (
+        {/* Mobilní search ikona (jen mimo Hub a mimo Suroviny) */}
+        {!hideHeaderSearch && !mobileSearchOpen && (
           <button
             onClick={() => setMobileSearchOpen(true)}
             className="sm:hidden text-white/70 hover:text-white p-2 transition-colors"
@@ -70,13 +78,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Zpět */}
         {!isHub && !mobileSearchOpen && (() => {
-          const { to, label } = backTarget(location.pathname)
+          const isRecipeDetail = !!location.pathname.match(/^\/recipe\/[^/]+$/)
+          if (isRecipeDetail) {
+            return (
+              <button
+                onClick={() => navigate(-1)}
+                className="text-sm text-amber-200/70 hover:text-white transition-colors shrink-0 flex items-center gap-1"
+              >
+                ←
+              </button>
+            )
+          }
+          const target = backTarget(location.pathname)
+          if (!target) return null
           return (
             <Link
-              to={to}
+              to={target.to}
               className="text-sm text-amber-200/70 hover:text-white transition-colors shrink-0 flex items-center gap-1"
             >
-              ← <span className="hidden sm:inline">{label}</span>
+              ← <span className="hidden sm:inline">{target.label}</span>
             </Link>
           )
         })()}

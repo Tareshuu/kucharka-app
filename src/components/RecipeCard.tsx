@@ -48,7 +48,11 @@ export default function RecipeCard({ recipe }: Props) {
         <div className="mt-auto pt-3 flex items-center gap-2 flex-wrap text-xs text-gray-400">
           <span className="truncate max-w-[120px]">{icon} {cat?.name ?? meta.category}</span>
           <span>·</span>
-          <span className="whitespace-nowrap">{(meta.baseWeight / 1000).toLocaleString('cs-CZ', { maximumFractionDigits: 1 })} kg</span>
+          <span className="whitespace-nowrap">
+            {meta.baseWeight >= 1000
+              ? `${(meta.baseWeight / 1000).toLocaleString('cs-CZ', { maximumFractionDigits: 1 })} kg`
+              : `${meta.baseWeight} g`}
+          </span>
           <span>·</span>
           <span className="whitespace-nowrap">{ingredients.length} surovin</span>
           {meta.difficulty && (

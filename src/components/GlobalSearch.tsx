@@ -8,14 +8,16 @@ interface Props {
   prominent?: boolean
 }
 
-function highlight(text: string, query: string) {
-  if (!query.trim()) return text
+function Highlight({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <>{text}</>
   const idx = text.toLowerCase().indexOf(query.toLowerCase())
-  if (idx === -1) return text
+  if (idx === -1) return <>{text}</>
   return (
-    text.slice(0, idx) +
-    `<mark class="bg-amber-200 rounded-sm">${text.slice(idx, idx + query.length)}</mark>` +
-    text.slice(idx + query.length)
+    <>
+      {text.slice(0, idx)}
+      <mark className="bg-amber-200 rounded-sm">{text.slice(idx, idx + query.length)}</mark>
+      {text.slice(idx + query.length)}
+    </>
   )
 }
 
@@ -70,7 +72,7 @@ export default function GlobalSearch({ dark, prominent }: Props) {
         type="search"
         value={query}
         onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
-        onFocus={() => setOpen(true)}
+        onFocus={() => { setOpen(true); setSelectedIdx(0) }}
         onKeyDown={handleKey}
         placeholder="Hledat recepty…"
         className={`w-full rounded-xl border px-4 py-2 text-sm outline-none transition-all ${inputCls} ${prominent ? 'text-base py-3' : ''}`}
@@ -94,10 +96,9 @@ export default function GlobalSearch({ dark, prominent }: Props) {
                   customCategories.find((c) => c.id === r.meta.category))?.icon ?? '🍖'}
               </span>
               <div className="min-w-0">
-                <div
-                  className="font-medium text-sm truncate"
-                  dangerouslySetInnerHTML={{ __html: highlight(r.meta.title, query) }}
-                />
+                <div className="font-medium text-sm truncate">
+                  <Highlight text={r.meta.title} query={query} />
+                </div>
                 {r.meta.description && (
                   <div className="text-xs text-gray-400 truncate">{r.meta.description}</div>
                 )}

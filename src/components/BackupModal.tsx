@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useRecipeStore } from '../store/recipeStore'
 import { useSmokingStore } from '../store/smokingStore'
 import type { SmokingSession } from '../types/smoking'
@@ -33,6 +33,12 @@ export default function BackupModal({ onClose }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<BackupData | null>(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
 
   function handleExport() {
     const data: BackupData = {
@@ -98,8 +104,12 @@ export default function BackupModal({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6" onClick={(e) => e.stopPropagation()}>
-        <h2 className="font-bold text-lg mb-4">Záloha a obnova</h2>
+      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="font-bold text-lg">Záloha a obnova</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl transition-colors">✕</button>
+        </div>
+        <div className="p-6">
 
         <div className="space-y-3">
           <button
@@ -148,6 +158,7 @@ export default function BackupModal({ onClose }: Props) {
         >
           Zavřít
         </button>
+        </div>
       </div>
     </div>
   )

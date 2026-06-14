@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecipeStore } from '../store/recipeStore'
 import { parseIngredientText } from '../modules/ingredientParser'
@@ -28,6 +28,12 @@ export default function ImportModal({ onClose, defaultCategory = 'klobasy' }: Pr
 
   const fileRef = useRef<HTMLInputElement>(null)
   const imgRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
 
   async function handlePDF(file: File) {
     setLoading(true)
